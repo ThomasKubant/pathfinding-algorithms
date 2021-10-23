@@ -6,10 +6,13 @@ import {
   getNodesInShortestPathOrder,
 } from "../../algorithms/dijkstra.js";
 
-const START_NODE_ROW = 10;
-const START_NODE_COL = 15;
-const FINISH_NODE_ROW = 10;
-const FINISH_NODE_COL = 35;
+
+var START_NODE_ROW = 0;
+var START_NODE_COL = 0;
+var FINISH_NODE_ROW = 24;
+var FINISH_NODE_COL = 74;
+const gridHeight = 25;
+const gridWidth = 75;
 
 export default class PathFinder extends Component {
   constructor() {
@@ -75,14 +78,48 @@ export default class PathFinder extends Component {
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
+  clear() {
+    for (let y = 0; y < gridHeight; y++) {
+      for (let x = 0; x < gridWidth; x++) {
+        console.log(x, y)
+        if (y === START_NODE_ROW && x === START_NODE_COL) {
+          document.getElementById(`node-${y}-${x}`).className = "node node-start";
+          console.log("FOUND START NODE")
+        }
+        else if (y === FINISH_NODE_ROW && x === FINISH_NODE_COL){
+          document.getElementById(`node-${y}-${x}`).className = "node node-finish";
+          console.log("FOUND END NODE")
+        }
+        else document.getElementById(`node-${y}-${x}`).className = "node";
+        
+      }
+    }
+    this.state.grid = getInitialGrid();
+  }
+
+  moveStartNode() {
+    var setStartInterval = setInterval(() => {
+      
+    }, 40)
+  }
+
   render() {
     const { grid, mouseIsPressed } = this.state;
 
     return (
       <>
-        <button onClick={() => this.visualizeDijkstra()}>
+        <div className="menu">
+          <button className="menu-btn" onClick={() => this.visualizeDijkstra()}>
             Visualize
-        </button>
+          </button>
+          <button className="menu-btn" onClick={() => this.clear()}>
+            Reset Grid
+          </button>
+          <button className="menu-btn" onClick={() => this.moveStartNode()}>
+            Set Start Node
+          </button>
+        </div>
+
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
@@ -116,9 +153,9 @@ export default class PathFinder extends Component {
 }
 const getInitialGrid = () => {
   const grid = [];
-  for (let row = 0; row < 20; row++) {
+  for (let row = 0; row < gridHeight; row++) {
     const currentRow = [];
-    for (let col = 0; col < 50; col++) {
+    for (let col = 0; col < gridWidth; col++) {
       currentRow.push(createNode(col, row));
     }
     grid.push(currentRow);
